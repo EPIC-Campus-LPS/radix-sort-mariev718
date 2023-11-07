@@ -1,45 +1,128 @@
 import java.util.*;
 import java.io.*;
+
+import static java.lang.Character.getNumericValue;
+
+import java.util.Hashtable;
+import java.util.LinkedList;
+
+import static java.lang.Character.getNumericValue;
+
 public class RadixSort {
 
     public static void main(String[] args) {
 
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter file name containing words to be sorted without '.txt'");
+        // MAKE INPUT GO TO INPUT ARRAY
 
-        String fileName = in.nextLine();
+//        Scanner in = new Scanner(System.in);
+//        System.out.println("Enter file name containing words to be sorted without '.txt'");
+//
+//        String fileName = in.nextLine();
+//
+//        Hashtable<Integer, String> words = new Hashtable<>(26);
+//
+//        File input = new File(fileName + ".txt");
+//
+//        try {
+//
+//            Scanner scanner = new Scanner(input);
+//
+//            while (scanner.hasNextLine()) {
+//
+//                String word = scanner.nextLine();
+//
+//                if(word.length() != 0) {
+//
+//                    char letter = word.toLowerCase().charAt(0);
+//                    int index = getNumericValue(letter);
+//
+//                    words.put(index, word);
+//
+//                }
+//
+//            }
+//
+//            scanner.close();
+//
+//        } catch (FileNotFoundException e) {
+//
+//            e.printStackTrace();
+//
+//        }
 
-        Hashtable<Integer, String> words = new Hashtable<>(26);
+        String[] input = {"enthusiasm", "milder", "STENCILED", "LIBELEES", "ReFurbISHMENT", "ComMANDEERs",
+                "spectroscopy", "DiSeMbOdyING", "pAnDErING", "EXPLORATIONS"};
 
-        File input = new File(fileName + ".txt");
+        Hashtable<Character, LinkedList<String>> words = new Hashtable<>(26);
 
-        try {
+        for (char letter = 'a'; letter <= 'z'; letter++) {
 
-            Scanner scanner = new Scanner(input);
+            LinkedList<String> linkedList = new LinkedList<>();
 
-            while (scanner.hasNextLine()) {
+            words.put(letter, linkedList);
 
-                String word = scanner.nextLine();
+        }
 
-                if(word.length() != 0) {
+        int longest = 0;
 
+        // determines the longest word length
+        for (int i = 0; i < input.length; i++) {
 
+            if (input[i].length() > longest) longest = input[i].length();
+
+        }
+
+        // organizes words by letter at last index to first index
+        for (int l = longest; l > 0; l--) {
+
+            // organizes words by letter at specific index
+            for (int j = 0; j < input.length; j++) {
+
+                if (input[j].length() >= l) {
+
+                    char letter = input[j].toLowerCase().charAt(l - 1);
+                    words.get(letter).add(input[j]);
+
+                    input[j] = null;
 
                 }
 
             }
 
-            scanner.close();
+            int n = 0;
 
-        } catch (FileNotFoundException e) {
+            // reassigns values not used to beginning of input list
+            for(int m = 0; m < input.length; m++) {
 
-            e.printStackTrace();
+                String temp = input[m];
+
+                if(input[m] != null) {
+
+                    input[n] = temp;
+
+                    n++;
+
+                }
+
+            }
+
+            // adds organized values to end of input in order
+            for (char letter = 'a'; letter <= 'z'; letter++) {
+
+                while(!words.get(letter).isEmpty()) {
+
+                    input[n] = words.get(letter).remove();
+                    n++;
+
+                }
+
+            }
 
         }
 
-        while(!words.isEmpty()) {
+        for(int p = 0; p < input.length; p++) {
 
-            System.out.println(words.remove());
+            System.out.println(input[p]);
 
         }
 
