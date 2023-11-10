@@ -5,12 +5,21 @@ import java.util.LinkedList;
 
 public class RadixSort {
 
-    public static void main(String[] args) throws IOException {
+    /**
+     * Sorts a file of words using radix sort and returns a sorted file
+     *
+     * @param f the path of file
+     * @throws IOException
+     */
+    public static void radixSort(File f) throws IOException {
 
+        // Creates string of words from file
         String t = "";
+        // Counts number of words in file
         int c = 0;
 
-        File file = new File("C:\\Users\\mariev718_lpsk12\\IdeaProjects\\radix-sort-mariev718\\.idea\\input.txt");
+        // Takes in word from file
+        File file = f;
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
 
@@ -25,6 +34,7 @@ public class RadixSort {
 
         }
 
+        // Takes string of words and makes into array of words
         String[] input = new String[c];
         for (int h = 0; h < c; h++) {
 
@@ -33,6 +43,7 @@ public class RadixSort {
 
         }
 
+        // creates a hashtable of linked lists, one linked list for each letter of the alphabet
         Hashtable<Character, LinkedList<String>> words = new Hashtable<>(26);
 
         for (char letter = 'a'; letter <= 'z'; letter++) {
@@ -138,6 +149,12 @@ public class RadixSort {
             e.printStackTrace();
 
         }
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        radixSort(new File("C:\\Users\\mariev718_lpsk12\\IdeaProjects\\radix-sort-mariev718\\.idea\\input.txt"));
 
     }
 
