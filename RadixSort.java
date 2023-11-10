@@ -1,57 +1,37 @@
 import java.util.*;
 import java.io.*;
-
-import static java.lang.Character.getNumericValue;
-
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import static java.lang.Character.getNumericValue;
-
 public class RadixSort {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        // MAKE INPUT GO TO INPUT ARRAY
+        String t = "";
+        int c = 0;
 
-//        Scanner in = new Scanner(System.in);
-//        System.out.println("Enter file name containing words to be sorted without '.txt'");
-//
-//        String fileName = in.nextLine();
-//
-//        Hashtable<Integer, String> words = new Hashtable<>(26);
-//
-//        File input = new File(fileName + ".txt");
-//
-//        try {
-//
-//            Scanner scanner = new Scanner(input);
-//
-//            while (scanner.hasNextLine()) {
-//
-//                String word = scanner.nextLine();
-//
-//                if(word.length() != 0) {
-//
-//                    char letter = word.toLowerCase().charAt(0);
-//                    int index = getNumericValue(letter);
-//
-//                    words.put(index, word);
-//
-//                }
-//
-//            }
-//
-//            scanner.close();
-//
-//        } catch (FileNotFoundException e) {
-//
-//            e.printStackTrace();
-//
-//        }
+        File file = new File("C:\\Users\\mariev718_lpsk12\\IdeaProjects\\radix-sort-mariev718\\.idea\\input.txt");
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
 
-        String[] input = {"enthusiasm", "milder", "STENCILED", "LIBELEES", "ReFurbISHMENT", "ComMANDEERs",
-                "spectroscopy", "DiSeMbOdyING", "pAnDErING", "EXPLORATIONS"};
+            String word = scanner.nextLine();
+
+            if (word.length() != 0) {
+
+                c++;
+                t += (word + " ");
+
+            }
+
+        }
+
+        String[] input = new String[c];
+        for (int h = 0; h < c; h++) {
+
+            input[h] = t.substring(0, t.indexOf(" "));
+            t = t.substring(t.indexOf(" ") + 1);
+
+        }
 
         Hashtable<Character, LinkedList<String>> words = new Hashtable<>(26);
 
@@ -66,9 +46,13 @@ public class RadixSort {
         int longest = 0;
 
         // determines the longest word length
-        for (int i = 0; i < input.length; i++) {
+        for (String s : input) {
 
-            if (input[i].length() > longest) longest = input[i].length();
+            if (s.length() > longest) {
+
+                longest = s.length();
+
+            }
 
         }
 
@@ -92,11 +76,11 @@ public class RadixSort {
             int n = 0;
 
             // reassigns values not used to beginning of input list
-            for(int m = 0; m < input.length; m++) {
+            for (int m = 0; m < input.length; m++) {
 
                 String temp = input[m];
 
-                if(input[m] != null) {
+                if (input[m] != null) {
 
                     input[n] = temp;
 
@@ -109,7 +93,7 @@ public class RadixSort {
             // adds organized values to end of input in order
             for (char letter = 'a'; letter <= 'z'; letter++) {
 
-                while(!words.get(letter).isEmpty()) {
+                while (!words.get(letter).isEmpty()) {
 
                     input[n] = words.get(letter).remove();
                     n++;
@@ -120,9 +104,38 @@ public class RadixSort {
 
         }
 
-        for(int p = 0; p < input.length; p++) {
+        // creates new file to return sorted words
+        File newFile = new File(file.getName().substring(0, file.getName().length() - 4) + "_key.txt");
 
-            System.out.println(input[p]);
+        if (newFile.createNewFile()) {
+
+            System.out.println("File created: " + newFile.getName());
+
+        } else {
+
+            System.out.println("file already exists.");
+
+        }
+
+        try {
+
+            FileWriter writer = new FileWriter(newFile.getName());
+
+            // writes sorted words to file
+            for(int n = 0; n < input.length; n++) {
+
+                writer.write(input[n] + "\n\n");
+
+            }
+
+            writer.close();
+
+            System.out.println("Done!");
+
+        } catch (IOException e) {
+
+            System.out.println("An error occurred.");
+            e.printStackTrace();
 
         }
 
